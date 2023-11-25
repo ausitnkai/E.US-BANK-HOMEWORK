@@ -1,29 +1,14 @@
 # Esun-project
 
-This template should help get you started developing with Vue 3 in Vite.
+由於目前發生資料無法卻繼承到網頁前端的問題，因此目前只能透過下列的方法操作:
 
-## Recommended IDE Setup
+1. 在終端機打 node server.js 來運詢後端伺服器
+2. 在終端機打 npm run dev 來啟用網業前端頁面
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+目前已完成的部分:
+1. 基本的前端網頁配置需求
+2. 基本的後端連接資料庫的需求
+3. 資料庫的基本內容
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+目前的問題: 
+1. 當確認好位置後要點及確認按，前端似乎無法擷取到該位置的訊息，導致無法進行對資料庫的操作
