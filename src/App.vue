@@ -15,7 +15,7 @@
     </div>
 
   <!-- 顯示座位表 -->
-      <div>
+    <div>
       <h2>座位表</h2>
       <div class="seating-chart">
         <!-- 座位表內容 -->
@@ -24,8 +24,14 @@
             :key="`${floor.FLOOR_NO}-${seat.SEAT_NO}`" 
             @click="seatClicked(floor.FLOOR_NO, seat.SEAT_NO)"
             :class="{ 'selected-seat': isSelected(floor.FLOOR_NO, seat.SEAT_NO) }"
+            :style="{ 'background-color': floor.floorSeatSeq && floor.floorSeatSeq.every(seq => seq !== '0') ? 'red' : 'selected-seat' }"
             class="floorAndSeat">
+            <span v-if="floor.floorSeatSeq && floor.floorSeatSeq.every(seq => seq !== '0')">
+              樓層{{ floor.FLOOR_NO }} 座號 {{ seat.SEAT_NO }} [員編: {{ floor.floorSeatSeq }}]
+            </span>
+            <span v-else>
               樓層{{ floor.FLOOR_NO }} 座號 {{ seat.SEAT_NO }}
+            </span>
           </div>
         </div>
       </div>
@@ -58,12 +64,19 @@ export default {
   computed: {
     floorSeats() {
       const floorSeats = {};
+      const floorSeatSeq = [];
+
       this.seatingChart.forEach((seat) => {
         if (!floorSeats[seat.FLOOR_NO]) {
           floorSeats[seat.FLOOR_NO] = { FLOOR_NO: seat.FLOOR_NO, seats: [] };
         }
         floorSeats[seat.FLOOR_NO].seats.push(seat);
+        // 將 FLOOR_SEAT_SEQ 的資料存到 floorSeatSeq 中
+        floorSeatSeq.push(seat.FLOOR_SEAT_SEQ);
       });
+
+      // console.log(floorSeats);
+      // console.log(floorSeatSeq);
       return Object.values(floorSeats);
     },
   },
@@ -82,6 +95,7 @@ export default {
       try {
         const response = await axios.get('http://localhost:8080/api/seats');
         this.seatingChart = response.data;
+        // console.log(this.seatingChart);
       } catch (error) {
         console.error('無法取得座位表:', error);
       }
@@ -92,10 +106,10 @@ export default {
         try {
           const selectedSeat = this.getSelectedSeat();
 
-          if (selectedSeat && selectedSeat.EMP_ID === '0') {
+          if (selectedSeat.EMP_ID === '0') {
             selectedSeat.EMP_ID = this.selectedEmployee;
 
-            await axios.put(`/api/seats/${selectedSeat.FLOOR_SEAT_SEQ}`, {
+            await axios.put(`/api/seats/${selectedSeat.EMP_ID}`, {
               FLOOR_NO: selectedSeat.FLOOR_NO,
               SEAT_NO: selectedSeat.SEAT_NO,
             });
@@ -115,6 +129,7 @@ export default {
     // 會回傳使用者所選擇的那個位置
     getSelectedSeat() {
       const selectedFloorSeatSeq = this.selectedSeats[0];
+      console.log(selectedFloorSeatSeq);
       return this.seatingChart.find(seat=>seat.FLOOR_SEAT_SEQ === selectedFloorSeatSeq);
     },
 

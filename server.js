@@ -83,7 +83,7 @@ app.get('/api/seats', (req, res) => {
 app.put('/api/seats/:id', (req, res) => {
   const { id } = req.params;
   const { FLOOR_NO, SEAT_NO } = req.body;
-  const sql = 'UPDATE seatingchart SET FLOOR_NO = ?, SEAT_NO = ? WHERE FLOOR_SEAT_SEQ = ?';
+  const sql = 'UPDATE seatingchart SET FLOOR_NO = ?, SEAT_NO = ? WHERE FLOOR_SEAT_SEQ = 0';
   connection.query(sql, [FLOOR_NO, SEAT_NO, id], (error, results) => {
     if (error) {
       res.status(500).json({ message: error.message });
